@@ -11,15 +11,16 @@ Patch for Turtle WoW client that adds account saving and order features and char
 ## Features
 
 - Adds an Accounts select panel to the login screen
-- Automatically adds accounts with saved login info to the list
-- - Select account to enter its log in info (double-click to login directly)
-- - Highlighting of accounts with auto-login set on a character
+- Select an account to enter its log in info (double-click to login directly)
+- - Automatically adds new accounts to the list
+- - Highlights accounts auto-login set on a character
 - Accounts and characters can be manually arranged
 ## Installation
 
 Download the repo place the files end in your WoW folder like this:
 ```
 Data\Interface\GlueXML\GlueXML.toc
+Data\Interface\GlueXML\AutoLogin.xml
 Data\Interface\GlueXML\AutoLogin.lua
 ```
 
