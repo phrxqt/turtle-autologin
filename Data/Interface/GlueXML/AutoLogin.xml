@@ -88,18 +88,6 @@
 							</Anchor>
 						</Anchors>
 					</FontString>
-					<!-- <FontString name="AutologinSizeWarning" inherits="GlueFontRedSmall" text="WARNING: Too many accounts. Changes won't be saved correctly.">
-						<Size>
-							<AbsDimension x="220" y="28"/>
-						</Size>
-						<Anchors>
-							<Anchor point="TOP" relativeTo="AutologinAccountsFrame" relativePoint="BOTTOM">
-								<Offset>
-									<AbsDimension x="0" y="4"/>
-								</Offset>
-							</Anchor>
-						</Anchors>
-					</FontString> -->
 			</Layer>
 		</Layers>
 		<Frames>
@@ -223,5 +211,12 @@
 				<AbsValue val="16"/>
 			</EdgeSize>
 		</Backdrop>
+		<Scripts>
+			<OnShow>
+				if not has_superwow then
+					this:Hide()
+				end
+			</OnShow>
+		</Scripts>
 	</Frame>
 </Ui>

@@ -26,7 +26,6 @@ if not has_superwow then
   }
 
   GlueDialog_Show("AL_NO_SWOW")
-  -- AutologinAccountsFrame:Hide()
   return
 end
 --------
@@ -307,14 +306,12 @@ function LoginManager:UpdateLoginUI()
       local autochar = ""
       for realm,data in pairs(self.State.accounts[acct_id].characters or {}) do
         if data.auto then
-          autochar = "|cffffff00"
+          autochar = "|cff00c7ff"
           break
         end
       end
 
-      _G["AutologinAccountButton" .. i .. "ButtonTextCharacter"]:SetText(
-        'Last character: ' .. (autochar .. (r.character or ""))
-      )
+      _G["AutologinAccountButton" .. i .. "ButtonTextCharacter"]:SetText(autochar .. (r.character or ""))
 
       if self.State.account_buttons_locked or acct_id == table.getn(self.State.accounts) then
         button.down:Hide()
@@ -373,7 +370,7 @@ function LoginManager:UpdateCharacterUI()
 
     if char.id == LoginManager.auto_char then
       button.auto:SetChecked(1)
-      _G["CharSelectCharacterButton"..index.."ButtonTextName"]:SetTextColor(0,1,1)
+      _G["CharSelectCharacterButton"..index.."ButtonTextName"]:SetTextColor(0,0.78,1)
     else
       button.auto:SetChecked(nil)
       _G["CharSelectCharacterButton"..index.."ButtonTextName"]:SetTextColor(1,0.78,0)
