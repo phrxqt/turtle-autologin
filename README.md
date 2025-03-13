@@ -1,4 +1,4 @@
-# Turtle AutoLogin 2.0.0
+# Turtle AutoLogin 2.0.1
 
 * Requires a recent enough version of [SuperWow](https://github.com/balakethelock/SuperWoW/), currently `>=1.4`  
 

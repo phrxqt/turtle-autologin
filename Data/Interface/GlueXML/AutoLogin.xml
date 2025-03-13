@@ -24,6 +24,18 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
+						<FontString name="$parentZone" inherits="GlueFontDisableSmall" justifyH="RIGHT">
+							<Size>
+								<AbsDimension x="217" y="13"/>
+							</Size>
+							<Anchors>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="-40" y="25"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
 						<FontString name="$parentCharacter" inherits="GlueFontDisableSmall" justifyH="LEFT">
 							<Size>
 								<AbsDimension x="217" y="16"/>

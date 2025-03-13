@@ -312,6 +312,7 @@ function LoginManager:UpdateLoginUI()
       end
 
       _G["AutologinAccountButton" .. i .. "ButtonTextCharacter"]:SetText(autochar .. (r.character or ""))
+      -- _G["AutologinAccountButton" .. i .. "ButtonTextZone"]:SetText(r.zone or "")
 
       if self.State.account_buttons_locked or acct_id == table.getn(self.State.accounts) then
         button.down:Hide()
@@ -607,6 +608,8 @@ function LoginManager:OnCharactersLoad()
           return ra < rb
         end)
 
+        CharacterSelect_SelectCharacter(saved_chars.last or 1)
+
         break
       end
     end
@@ -616,6 +619,7 @@ function LoginManager:OnCharactersLoad()
     CharacterSelect_SelectCharacter(self.auto_char)
     EnterWorld()
   end
+
 
   self:UpdateUI()
 end
@@ -636,7 +640,10 @@ function LoginManager:EnterWorld()
     end
     chars.auto = self.auto_char or nil
     chars.char_buttons_locked = self.char_buttons_locked or nil
-    acct.character = GetCharacterInfo(chars.last)
+    local name, _race, _class, _level, zone, _race2, _gender, _isGhost = GetCharacterInfo(chars.last)
+
+    acct.character = name
+    acct.zone = zone
   end
   self:SaveAccounts()
 
@@ -708,7 +715,9 @@ CharacterSelectButton_OnClick = function (a1,a2,a3,a4,a5,a6,a7,a8,a9)
   -- orig_CharacterSelectButton_OnClick(a1,a2,a3,a4,a5,a6,a7,a8,a9)
   local id = this:GetID()
   local sorted_id = LoginManager.realm_chars[id].id
-  CharacterSelect_SelectCharacter(sorted_id)
+  if ( sorted_id ~= CharacterSelect.selectedIndex ) then
+    CharacterSelect_SelectCharacter(sorted_id)
+  end
   LoginManager:UpdateUI()
 end
 
