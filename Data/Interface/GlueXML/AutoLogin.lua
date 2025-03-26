@@ -168,6 +168,30 @@ function LoginManager:MakeExtraAccountButtons()
       end)
       acctButton.down = downButton
     end
+
+    if not acctButton.char then
+      -- Create the Char button
+      local charButton = CreateFrame("Button", acctButton:GetName().."Char", acctButton, "GlueButtonSmallTemplate")
+      charButton:SetWidth(40)
+      charButton:SetHeight(35)
+      charButton:SetPoint("RIGHT", acctButton, "RIGHT", -50, 8)
+      charButton:SetHitRectInsets(1, 1, 1, 1)
+
+      charButton:SetScript("OnClick", function()
+        LoginManager:SelectAccount(this:GetParent():GetID())
+        LoginManager.auto_char_button_pressed = true
+        AccountLogin_Login()
+      end)
+      charButton:SetScript("OnEnter", function()
+        this:GetParent():LockHighlight()
+      end)
+      charButton:SetScript("OnLeave", function()
+        if this:GetParent():GetID() ~= self.SelectedAcct then
+          this:GetParent():UnlockHighlight()
+        end
+      end)
+      acctButton.char = charButton
+    end
   end
 
   local quitButton = _G["AccountLoginExitButton"]
@@ -311,7 +335,11 @@ function LoginManager:UpdateLoginUI()
         end
       end
 
-      _G["AutologinAccountButton" .. i .. "ButtonTextCharacter"]:SetText(autochar .. (r.character or ""))
+      -- _G["AutologinAccountButton" .. i .. "ButtonTextCharacter"]:SetText(autochar .. (r.character or ""))
+      button.char:SetText(autochar .. (r.character or ""))
+      button.char:SetWidth(button.char:GetFontString():GetStringWidth() + 20)
+
+      -- newWidth = self:GetFontString():GetStringWidth() + padding
       -- _G["AutologinAccountButton" .. i .. "ButtonTextZone"]:SetText(r.zone or "")
 
       if self.State.account_buttons_locked or acct_id == table.getn(self.State.accounts) then
@@ -324,7 +352,11 @@ function LoginManager:UpdateLoginUI()
       else
         button.up:Show()
       end
-      
+      if not r.character or r.character == "" then
+        button.char:Hide()
+      else
+        button.char:Show()
+      end
       if (self.SelectedAcct == acct_id) then
         button:LockHighlight()
       end
@@ -613,6 +645,8 @@ function LoginManager:OnCharactersLoad()
         break
       end
     end
+    local chars = acct.characters[self.realm]
+    if self.auto_char_button_pressed then self.auto_char = chars and chars.last end
   end
 
   if self.auto_char and self.auto_char > 0 and self.from_login_screen then

@@ -36,7 +36,7 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<FontString name="$parentCharacter" inherits="GlueFontDisableSmall" justifyH="LEFT">
+						<!-- <FontString name="$parentCharacter" inherits="GlueFontDisableSmall" justifyH="LEFT">
 							<Size>
 								<AbsDimension x="217" y="16"/>
 							</Size>
@@ -47,7 +47,7 @@
 									</Offset>
 								</Anchor>
 							</Anchors>
-						</FontString>
+						</FontString> -->
 					</Layer>
 				</Layers>
 			</Frame>
