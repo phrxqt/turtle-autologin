@@ -19,5 +19,5 @@ GlueTooltip.xml
 RealmWizard.xml
 CreditsFrame.xml
 
-# Autologin 2.2.1
+# Autologin 2.2.2
 AutoLogin.xml

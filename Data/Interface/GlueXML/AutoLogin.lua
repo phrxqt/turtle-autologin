@@ -584,17 +584,13 @@ function LoginManager:OnCharactersLoad()
         end)
 
         CharacterSelect_SelectCharacter(saved_chars.last or 1)
+        if self.auto_char_button_pressed then
+          EnterWorld()
+        end
 
         break
       end
     end
-    local chars = acct.characters[self.realm]
-    if self.auto_char_button_pressed then self.auto_char = chars and chars.last end
-  end
-
-  if self.auto_char and self.auto_char > 0 and self.from_login_screen then
-    CharacterSelect_SelectCharacter(self.auto_char)
-    EnterWorld()
   end
 
 
