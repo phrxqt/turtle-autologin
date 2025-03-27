@@ -36,18 +36,6 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<!-- <FontString name="$parentCharacter" inherits="GlueFontDisableSmall" justifyH="LEFT">
-							<Size>
-								<AbsDimension x="217" y="16"/>
-							</Size>
-							<Anchors>
-								<Anchor point="TOPLEFT" relativeTo="$parentName" relativePoint="BOTTOMLEFT">
-									<Offset>
-										<AbsDimension x="0" y="-2"/>
-									</Offset>
-								</Anchor>
-							</Anchors>
-						</FontString> -->
 					</Layer>
 				</Layers>
 			</Frame>

@@ -327,20 +327,8 @@ function LoginManager:UpdateLoginUI()
       local r = self.State.accounts[acct_id]
       _G["AutologinAccountButton" .. i .. "ButtonTextName"]:SetText(r.account)
 
-      local autochar = ""
-      for realm,data in pairs(self.State.accounts[acct_id].characters or {}) do
-        if data.auto then
-          autochar = "|cff00c7ff"
-          break
-        end
-      end
-
-      -- _G["AutologinAccountButton" .. i .. "ButtonTextCharacter"]:SetText(autochar .. (r.character or ""))
-      button.char:SetText(autochar .. (r.character or ""))
+      button.char:SetText(r.character or "")
       button.char:SetWidth(button.char:GetFontString():GetStringWidth() + 20)
-
-      -- newWidth = self:GetFontString():GetStringWidth() + padding
-      -- _G["AutologinAccountButton" .. i .. "ButtonTextZone"]:SetText(r.zone or "")
 
       if self.State.account_buttons_locked or acct_id == table.getn(self.State.accounts) then
         button.down:Hide()
@@ -401,22 +389,12 @@ function LoginManager:UpdateCharacterUI()
       button:LockHighlight()
     end
 
-    if char.id == LoginManager.auto_char then
-      button.auto:SetChecked(1)
-      _G["CharSelectCharacterButton"..index.."ButtonTextName"]:SetTextColor(0,0.78,1)
-    else
-      button.auto:SetChecked(nil)
-      _G["CharSelectCharacterButton"..index.."ButtonTextName"]:SetTextColor(1,0.78,0)
-    end
-
     if LoginManager.char_buttons_locked then
       button.up:Hide()
       button.down:Hide()
-      button.auto:Hide()
     else
       button.up:Show()
       button.down:Show()
-      button.auto:Show()
     end
 
     index = index + 1
@@ -535,40 +513,6 @@ function LoginManager:OnCharactersLoad()
       end)
       charButton.down = downButton
     end
-
-    if not charButton.auto then
-      -- Create the Down button
-      local autoButton = CreateFrame("CheckButton", charButton:GetName().."AutoLogin", charButton)
-      autoButton:SetWidth(32)
-      autoButton:SetHeight(32)
-      autoButton:SetPoint("RIGHT", charButton.up, "LEFT", 0, 0)
-      autoButton:SetNormalTexture("Interface\\Buttons\\UI-CheckBox-Up")
-      autoButton:SetPushedTexture("IInterface\\Buttons\\UI-CheckBox-Down")
-      autoButton:SetHighlightTexture("Interface\\Buttons\\UI-CheckBox-Highlight", "ADD")
-      autoButton:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
-      autoButton:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Disabled")
-    
-      autoButton:SetScript("OnClick", function()
-        local id = this:GetParent():GetID()
-        local sorted_id = LoginManager.realm_chars[id].id
-        if LoginManager.auto_char == sorted_id then
-          LoginManager.auto_char = nil
-        else
-          LoginManager.auto_char = sorted_id
-        end
-        LoginManager:UpdateUI()
-      end)
-      autoButton:SetScript("OnEnter", function()
-        this:GetParent():LockHighlight()
-        GlueTooltip_SetOwner(nil, nil, -250, -5);
-        GlueTooltip_SetText("Automatically log into this character.", nil, 1.0, 1.0, 1.0);
-      end)
-      autoButton:SetScript("OnLeave", function()
-        this:GetParent():UnlockHighlight()
-        GlueTooltip:Hide()
-      end)
-      charButton.auto = autoButton
-    end
   end
 
   local addonsButton = _G["CharacterSelectAddonsButton"]
@@ -623,7 +567,6 @@ function LoginManager:OnCharactersLoad()
   if acct and acct.characters then
     for saved_realm,saved_chars in pairs(acct.characters or {}) do
       if saved_realm == self.realm then
-        self.auto_char = saved_chars.auto
         self.char_buttons_locked = saved_chars.char_buttons_locked
 
         local orderRank = {}
@@ -672,7 +615,6 @@ function LoginManager:EnterWorld()
     for i,char in ipairs(LoginManager.realm_chars) do
       table.insert(chars.order, { id = char.id, name = char.name })
     end
-    chars.auto = self.auto_char or nil
     chars.char_buttons_locked = self.char_buttons_locked or nil
     local name, _race, _class, _level, zone, _race2, _gender, _isGhost = GetCharacterInfo(chars.last)
 
