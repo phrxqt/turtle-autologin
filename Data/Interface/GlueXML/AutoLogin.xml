@@ -65,7 +65,7 @@
 	</Button>
 	<Frame name="AutologinAccountsFrame" parent="AccountLoginUI">
 		<Size>
-			<AbsDimension x="260" y="348"/>
+			<AbsDimension x="260" y="490"/>
 		</Size>
 		<Anchors>
 			<Anchor point="TOPRIGHT">
@@ -76,7 +76,7 @@
 		</Anchors>
 		<Layers>
 			<Layer level="BACKGROUND">
-					<FontString text="Select account" inherits="GlueFontDisableLarge">
+					<FontString text="Select account" inherits="GlueFontDisableLarge" name="AutologinSelectAccountText">
 						<Size>
 							<AbsDimension x="256" y="13"/>
 						</Size>
@@ -139,6 +139,33 @@
 			<Button name="AutologinAccountButton6" inherits="AutologinAccountButtonTemplate" id="6">
 				<Anchors>
 					<Anchor point="TOP" relativeTo="AutologinAccountButton5" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension y="13"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="AutologinAccountButton7" inherits="AutologinAccountButtonTemplate" id="7">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="AutologinAccountButton6" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension y="13"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="AutologinAccountButton8" inherits="AutologinAccountButtonTemplate" id="8">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="AutologinAccountButton7" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension y="13"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="AutologinAccountButton9" inherits="AutologinAccountButtonTemplate" id="9">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="AutologinAccountButton8" relativePoint="BOTTOM">
 						<Offset>
 							<AbsDimension y="13"/>
 						</Offset>
@@ -213,7 +240,7 @@
 		</Backdrop>
 		<Scripts>
 			<OnShow>
-				if not has_superwow then
+				if not LoginManager.has_superwow then
 					this:Hide()
 				end
 			</OnShow>

@@ -1,4 +1,4 @@
-# Turtle AutoLogin 2.2.3
+# Turtle AutoLogin 2.3.0
 
 * Requires a recent enough version of [SuperWow](https://github.com/balakethelock/SuperWoW/), currently `>=1.4`  
 
@@ -14,7 +14,9 @@ Patch for Turtle WoW client that adds account saving and order features and char
 - Select an account to enter its login info (double-click to login directly)
 - - Automatically adds new accounts to the list
 - Accounts and characters can be manually arranged
-- Directly-login-to-last-character button
+- Login-to-last-character buttons
+- Streamer mode to reduce information leakage
+
 ## Installation
 
 Download the repo place the files end in your WoW folder like this:
