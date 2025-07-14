@@ -2,6 +2,8 @@
 -- setup
 --------
 
+-- toto, make cancelling a login clear LoginManager.auto_char_button_pressed = true
+
 local _G = _G or getfenv(0)
 local L = {}
 
@@ -26,23 +28,59 @@ local function GetLocalizedText(key)
     return (L[locale] and L[locale][key]) or L["enUS"][key]
 end
 
-LoginManager = {}
-LoginManager.State = {}
-LoginManager.SelectedAcct = nil
-LoginManager.CurrentPage = 0
-LoginManager.PageSize = 6
-LoginManager.LimitReached = false
-LoginManager.from_login_screen = false
+local L = {}
 
-LoginManager.has_superwow = false
+L["enUS"] = {
+  -- localize the Left value
+  class = {
+    ["Druid"] = "Druid",
+    ["Hunter"] = "Hunter",
+    ["Mage"] = "Mage",
+    ["Paladin"] = "Paladin",
+    ["Priest"] = "Priest",
+    ["Rogue"] = "Rogue",
+    ["Shaman"] = "Shaman",
+    ["Warrior"] = "Warrior",
+    ["Warlock"] = "Warlock",
+  },
+  -- localize the Right value
+  ["SelectAccount"] = "Select account",
+  ["RemoveAccount"] = "Remove account",
+  ["LockAccounts"] = "Lock Accounts",
+  ["StreamerMode"] = "Streamer Mode",
+  ["LockCharacters"] = "Lock Characters",
+  ["NoSuperWoW"] = "|cff77ff00Turtle AutoLogin|r requires SuperWoW 1.4 or newer to operate.",
+}
 
-if SUPERWOW_VERSION and tonumber(SUPERWOW_VERSION) >= 1.4 then
-  has_superwow = true
-end
+L["ruRU"] = {
+  -- localize the Left value
+  class = {
+    ["Друид"] = "Druid",
+    ["Охотник"] = "Hunter",
+    ["Маг"] = "Mage",
+    ["Паладин"] = "Paladin",
+    ["Жрец"] = "Priest",
+    ["Разбойник"] = "Rogue",
+    ["Шаман"] = "Shaman",
+    ["Воин"] = "Warrior",
+    ["Чернокнижник"] = "Warlock",
+  },
+  -- localize the Right value
+  ["SelectAccount"] = "Выберите аккаунт",
+  ["RemoveAccount"] = "Удалить аккаунт",
+  ["LockAccounts"] = "Заблокировать аккаунты",
+  ["StreamerMode"] = "Режим стримера",
+  ["LockCharacters"] = "Заблокировать персонажей",
+  ["NoSuperWoW"] = "|cff77ff00Turtle AutoLogin|r требует SuperWoW 1.4 или новее для работы.",
+}
+
+L = L[GetLocale()] or L["enUS"]
+
+local has_superwow = SUPERWOW_VERSION and tonumber(SUPERWOW_VERSION) >= 1.4
 
 if not has_superwow then
   GlueDialogTypes["AL_NO_SWOW"] = {
-    text = GetLocalizedText("NoSuperWoW"),
+    text = L["NoSuperWoW"],
     button1 = TEXT(OKAY),
     showAlert = 1,
   }
@@ -50,6 +88,28 @@ if not has_superwow then
   GlueDialog_Show("AL_NO_SWOW")
   return
 end
+
+local CLASS_COLORS = {
+  ["Druid"] = { r = 1.00, g = 0.49, b = 0.04, colorStr = "ffFF7C0A" },
+  ["Mage"]    = { r = 0.25, g = 0.78, b = 0.92, colorStr = "ff3FC7EB" },
+  ["Hunter"] = { r = 0.67, g = 0.83, b = 0.45, colorStr = "ffAAD372" },
+  ["Paladin"] = { r = 0.96, g = 0.55, b = 0.73, colorStr = "ffF48CBA" },
+  ["Priest"] = { r = 1.00, g = 1.00, b = 1.00, colorStr = "ffFFFFFF" },
+  ["Rogue"] = { r = 1.00, g = 0.96, b = 0.41, colorStr = "ffFFF468" },
+  ["Shaman"] = { r = 0.00, g = 0.44, b = 0.87, colorStr = "ff0070DD" },
+  ["Warlock"] = { r = 0.53, g = 0.53, b = 0.93, colorStr = "ff8788EE" },
+  ["Warrior"] = { r = 0.78, g = 0.61, b = 0.43, colorStr = "ffC69B6D" },
+}
+
+LoginManager = {}
+LoginManager.State = {}
+LoginManager.SelectedAcct = nil
+LoginManager.CurrentPage = 0
+LoginManager.PageSize = 9
+LoginManager.LimitReached = false
+LoginManager.from_login_screen = false
+LoginManager.has_superwow = has_superwow
+
 --------
 
 -------
@@ -133,6 +193,21 @@ function LoginManager:FromFile(file)
   return false
 end
 
+function LoginManager:HideSideButtons()
+  local hide_frames = {
+    "AccountLoginTurtleWebsite",
+    "AccountLoginTurtleArmory",
+    "AccountLoginTurtleKnowledgeDatabase",
+    "AccountLoginTurtleCommunityForum",
+    "AccountLoginTurtleDiscord",
+    "AccountLoginTurtleReddit",
+    "AccountLoginCinematicsButton",
+    -- "AccountLoginCreditsButton",
+  }
+  for _,frame in ipairs(hide_frames) do
+    if _G[frame] then _G[frame]:Hide() end
+  end
+end
 
 function LoginManager:MakeExtraAccountButtons()
   -- make account up/down/lock buttons
@@ -149,7 +224,7 @@ function LoginManager:MakeExtraAccountButtons()
       upButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollUp-Up")
       upButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollUp-Down")
       upButton:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
-    
+
       upButton:SetScript("OnClick", function()
         moveIndexUp(self.State.accounts, this:GetParent():GetID())
         LoginManager:UpdateUI()
@@ -164,7 +239,7 @@ function LoginManager:MakeExtraAccountButtons()
       end)
       acctButton.up = upButton
     end
-  
+
     if not acctButton.down then
       -- Create the Down button
       local downButton = CreateFrame("Button", acctButton:GetName().."Down", acctButton)
@@ -175,7 +250,7 @@ function LoginManager:MakeExtraAccountButtons()
       downButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
       downButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
       downButton:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
-    
+
       downButton:SetScript("OnClick", function()
         moveIndexDown(self.State.accounts, this:GetParent():GetID())
         LoginManager:UpdateUI()
@@ -226,15 +301,53 @@ function LoginManager:MakeExtraAccountButtons()
     lockButton:SetWidth(textWidth + 50) -- Add indents to the edges
     lockButton:SetHeight(35)
     lockButton:SetPoint("RIGHT", quitButton, "LEFT", 4, 0)
-    lockButton:SetText(GetLocalizedText("LockAccounts"))
-  
+
+    lockButton:SetText(L["LockAccounts"])
+    lockButton:SetWidth(lockButton:GetFontString():GetStringWidth() + 50)
+
     lockButton:SetScript("OnClick", function()
       LoginManager.State.account_buttons_locked = not LoginManager.State.account_buttons_locked
       this:Show()
+      LoginManager:SaveAccounts()
 
       LoginManager:UpdateUI()
     end)
     quitButton.lock = lockButton
+  end
+
+  if not quitButton.streamer then
+    -- Create the Lock button
+    local streamerButton = CreateFrame("Button", "ButtonAccountButtonsStreamer", quitButton, "GlueButtonSmallTemplate")
+    streamerButton:SetWidth(150)
+    streamerButton:SetHeight(35)
+    streamerButton:SetPoint("RIGHT", quitButton.lock, "LEFT", 4, 0)
+
+    streamerButton:SetText(L["StreamerMode"])
+    streamerButton:SetWidth(streamerButton:GetFontString():GetStringWidth() + 50)
+
+    streamerButton:SetScript("OnClick", function()
+      LoginManager.State.account_buttons_streamer = not LoginManager.State.account_buttons_streamer
+      this:Show()
+
+      LoginManager:UpdateUI()
+    end)
+    quitButton.streamer = streamerButton
+  end
+
+  if not AccountLoginAccountEdit.cover then
+    -- Create the account input cover for streaming mode
+    local cover = CreateFrame("Frame", nil, AccountLoginAccountEdit)
+    cover:SetFrameLevel(AccountLoginAccountEdit:GetFrameLevel() + 10)
+
+    cover:SetWidth(AccountLoginAccountEdit:GetWidth()-15)
+    cover:SetHeight(AccountLoginAccountEdit:GetHeight()-15)
+    cover:SetPoint("TOPLEFT",AccountLoginAccountEdit,"TOPLEFT", 10, -6)
+
+    local tex = cover:CreateTexture()
+    tex:SetAllPoints(cover)
+    tex:SetTexture(0, 0, 0, 1)  -- RGBA: Black, 80% opaque
+
+    AccountLoginAccountEdit.cover = cover
   end
 end
 
@@ -251,6 +364,7 @@ function LoginManager:LoadAccounts()
     if file.accounts then self.State.accounts = file.accounts end
     if file.last then self.State.last = file.last end
     if file.account_buttons_locked then self.State.account_buttons_locked = file.account_buttons_locked end
+    if file.account_buttons_streamer then self.State.account_buttons_streamer = file.account_buttons_streamer end
     return true
   elseif login_data then -- old format
     for label,account,password,character,auto,last in string.gfind(login_data, "label:(%S*) account:(%S+) password(:%S+) character:(%S*) auto:(%S*) last:(%S*)\n") do
@@ -330,6 +444,7 @@ end
 function LoginManager:UpdateUI()
   if AccountLoginUI:IsVisible() then
     self:MakeExtraAccountButtons()
+    self:HideSideButtons()
     AccountLoginSaveAccountName:Hide()
     self:UpdateLoginUI()
   elseif CharacterSelectUI:IsVisible() then
@@ -342,8 +457,17 @@ function LoginManager:UpdateLoginUI()
   local pageIndices = {}
   local skip = self.CurrentPage * self.PageSize;
 
-  AutologinSelectAccountText:SetText(GetLocalizedText("SelectAccount"))
-  AutologinRemoveAccountButton:SetText(GetLocalizedText("RemoveAccount"))
+  AutologinSelectAccountText:SetText(L["SelectAccount"])
+  AutologinRemoveAccountButton:SetText(L["RemoveAccount"])
+
+  local streamer = self.State.account_buttons_streamer
+  if AccountLoginAccountEdit.cover then
+    if streamer then
+      AccountLoginAccountEdit.cover:Show()
+    else
+      AccountLoginAccountEdit.cover:Hide()
+    end
+  end
 
   for i = 1, self.PageSize do
     local button = _G["AutologinAccountButton" .. i]
@@ -353,9 +477,24 @@ function LoginManager:UpdateLoginUI()
       button:Hide()
     else
       local r = self.State.accounts[acct_id]
-      _G["AutologinAccountButton" .. i .. "ButtonTextName"]:SetText(r.account)
+      local selected = self.SelectedAcct == acct_id
 
-      button.char:SetText(r.character or "")
+      local acc_str =  r.account
+      if streamer then
+        acc_str = string.sub(acc_str,1,1) .. string.rep('*',5) .. string.sub(acc_str,-2)
+      end
+      _G["AutologinAccountButton" .. i .. "ButtonTextName"]:SetText(acc_str)
+
+      -- get save class, show character login name using class info and whether we're in streamer mode
+      local class_str = r.class or "-----"
+      local chr_str = streamer and class_str or r.character
+      local class_clr = r.class and L.class[class_str] and CLASS_COLORS[L.class[class_str]].colorStr
+
+      if class_clr then
+        chr_str = class_clr and ("|c" .. class_clr .. chr_str .. "|r")
+      end
+
+      button.char:SetText(chr_str or "")
       button.char:SetWidth(button.char:GetFontString():GetStringWidth() + 20)
 
       if self.State.account_buttons_locked or acct_id == table.getn(self.State.accounts) then
@@ -373,7 +512,7 @@ function LoginManager:UpdateLoginUI()
       else
         button.char:Show()
       end
-      if (self.SelectedAcct == acct_id) then
+      if selected then
         button:LockHighlight()
       end
       button:Show()
@@ -389,6 +528,25 @@ function LoginManager:UpdateLoginUI()
     else
       lockButton:GetNormalTexture():SetVertexColor(1,1,1)
       lockButton:SetTextColor(1,0.78,0)
+    end
+  end
+  local streamerButton = _G["ButtonAccountButtonsStreamer"]
+  if streamerButton then
+    if self.State.account_buttons_streamer then
+      streamerButton:GetNormalTexture():SetVertexColor(0.5,0.5,0.5)
+      streamerButton:SetTextColor(0.5,0.5,0.5)
+    else
+      streamerButton:GetNormalTexture():SetVertexColor(1,1,1)
+      streamerButton:SetTextColor(1,0.78,0)
+    end
+  end
+
+  local removeButton = _G["AutologinRemoveAccountButton"]
+  if removeButton then
+    if self.State.account_buttons_locked then
+      removeButton:Hide()
+    else
+      removeButton:Show()
     end
   end
 end
@@ -407,9 +565,12 @@ function LoginManager:UpdateCharacterUI()
       if ( not char.zone ) then
         zone = ""  
       end
+      local classColor = L.class[char.class] and CLASS_COLORS[L.class[char.class]].colorStr or "ffFFFFFF"
+
       _G["CharSelectCharacterButton"..index.."ButtonTextName"]:SetText(char.name)  
       _G["CharSelectCharacterButton"..index.."ButtonTextInfo"]:SetText(
-          format(TEXT(char.ghost and CHARACTER_SELECT_INFO_GHOST or CHARACTER_SELECT_INFO), char.level, char.class))  
+        format(TEXT(char.ghost and CHARACTER_SELECT_INFO_GHOST or CHARACTER_SELECT_INFO), char.level, "|c" .. classColor .. char.class .. "|r")
+      )
       _G["CharSelectCharacterButton"..index.."ButtonTextLocation"]:SetText(zone)  
     end
     
@@ -500,7 +661,7 @@ function LoginManager:OnCharactersLoad()
       upButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollUp-Up")
       upButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollUp-Down")
       upButton:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
-    
+
       upButton:SetScript("OnClick", function()
         moveIndexUp(LoginManager.realm_chars, this:GetParent():GetID())
         LoginManager:UpdateUI()
@@ -515,7 +676,7 @@ function LoginManager:OnCharactersLoad()
       end)
       charButton.up = upButton
     end
-  
+
     if not charButton.down then
       -- Create the Down button
       local downButton = CreateFrame("Button", charButton:GetName().."Down", charButton)
@@ -526,7 +687,7 @@ function LoginManager:OnCharactersLoad()
       downButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
       downButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
       downButton:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
-    
+
       downButton:SetScript("OnClick", function()
         moveIndexDown(LoginManager.realm_chars, this:GetParent():GetID())
         LoginManager:UpdateUI()
@@ -553,11 +714,14 @@ function LoginManager:OnCharactersLoad()
     lockButton:SetWidth(textWidth + 50) -- Add indents to the edges
     lockButton:SetHeight(35)
     lockButton:SetPoint("LEFT", addonsButton, "RIGHT", 4, 0)
-    lockButton:SetText(GetLocalizedText("LockCharacters"))
+
+    lockButton:SetText(L["LockCharacters"])
+    lockButton:SetWidth(lockButton:GetFontString():GetStringWidth() + 50)
 
     lockButton:SetScript("OnClick", function()
       LoginManager.char_buttons_locked = not LoginManager.char_buttons_locked
       this:Show()
+      LoginManager:SaveAccounts()
 
       LoginManager:UpdateUI()
     end)
@@ -624,7 +788,6 @@ function LoginManager:OnCharactersLoad()
     end
   end
 
-
   self:UpdateUI()
 end
 
@@ -643,9 +806,11 @@ function LoginManager:EnterWorld()
       table.insert(chars.order, { id = char.id, name = char.name })
     end
     chars.char_buttons_locked = self.char_buttons_locked or nil
-    local name, _race, _class, _level, zone, _race2, _gender, _isGhost = GetCharacterInfo(chars.last)
+    local name, race, class, _level, zone, _race2, _gender, _isGhost = GetCharacterInfo(chars.last)
 
     acct.character = name
+    acct.class = class
+    acct.race = race
     acct.zone = zone
   end
   self:SaveAccounts()
