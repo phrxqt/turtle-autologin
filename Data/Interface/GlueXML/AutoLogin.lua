@@ -33,21 +33,21 @@ L["enUS"] = {
 L["ruRU"] = {
   -- localize the Left value
   class = {
-    ["Druid"] = "Druid",
-    ["Hunter"] = "Hunter",
-    ["Mage"] = "Mage",
-    ["Paladin"] = "Paladin",
-    ["Priest"] = "Priest",
-    ["Rogue"] = "Rogue",
-    ["Shaman"] = "Shaman",
-    ["Warrior"] = "Warrior",
-    ["Warlock"] = "Warlock",
+    ["Друид"] = "Druid",
+    ["Охотник"] = "Hunter",
+    ["Маг"] = "Mage",
+    ["Паладин"] = "Paladin",
+    ["Жрец"] = "Priest",
+    ["Разбойник"] = "Rogue",
+    ["Шаман"] = "Shaman",
+    ["Воин"] = "Warrior",
+    ["Чернокнижник"] = "Warlock",
   },
   -- localize the Right value
   ["SelectAccount"] = "Выберите аккаунт",
   ["RemoveAccount"] = "Удалить аккаунт",
   ["LockAccounts"] = "Заблокировать аккаунты",
-  ["StreamerMode"] = "Streamer Mode",
+  ["StreamerMode"] = "Режим стримера",
   ["LockCharacters"] = "Заблокировать персонажей",
   ["NoSuperWoW"] = "|cff77ff00Turtle AutoLogin|r требует SuperWoW 1.4 или новее для работы.",
 }
