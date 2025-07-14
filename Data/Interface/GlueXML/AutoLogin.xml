@@ -76,7 +76,7 @@
 		</Anchors>
 		<Layers>
 			<Layer level="BACKGROUND">
-					<FontString text="Select account" inherits="GlueFontDisableLarge" name="AutologinSelectAccountText">
+					<FontString name="AutologinSelectAccountText" inherits="GlueFontDisableLarge">
 						<Size>
 							<AbsDimension x="256" y="13"/>
 						</Size>

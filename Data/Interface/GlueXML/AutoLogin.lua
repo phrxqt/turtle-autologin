@@ -5,6 +5,28 @@
 -- toto, make cancelling a login clear LoginManager.auto_char_button_pressed = true
 
 local _G = _G or getfenv(0)
+local L = {}
+
+L["enUS"] = {
+    ["SelectAccount"] = "Select account",
+    ["RemoveAccount"] = "Remove account",
+    ["LockAccounts"] = "Lock Accounts",
+    ["LockCharacters"] = "Lock Characters",
+    ["NoSuperWoW"] = "|cff77ff00Turtle AutoLogin|r requires SuperWoW 1.4 or newer to operate.",
+}
+
+L["ruRU"] = {
+    ["SelectAccount"] = "Выберите аккаунт",
+    ["RemoveAccount"] = "Удалить аккаунт",
+    ["LockAccounts"] = "Заблокировать аккаунты",
+    ["LockCharacters"] = "Заблокировать персонажей",
+    ["NoSuperWoW"] = "|cff77ff00Turtle AutoLogin|r требует SuperWoW 1.4 или новее для работы.",
+}
+
+local function GetLocalizedText(key)
+    local locale = GetLocale() or "enUS"
+    return (L[locale] and L[locale][key]) or L["enUS"][key]
+end
 
 local L = {}
 
@@ -273,7 +295,10 @@ function LoginManager:MakeExtraAccountButtons()
   if not quitButton.lock then
     -- Create the Lock button
     local lockButton = CreateFrame("Button", "ButtonAccountButtonsLock", quitButton, "GlueButtonSmallTemplate")
-    lockButton:SetWidth(150)
+    local buttonText = GetLocalizedText("LockAccounts") -- Dynamic width depending on the text
+    lockButton:SetText(buttonText)
+    local textWidth = lockButton:GetFontString():GetStringWidth()
+    lockButton:SetWidth(textWidth + 50) -- Add indents to the edges
     lockButton:SetHeight(35)
     lockButton:SetPoint("RIGHT", quitButton, "LEFT", 4, 0)
 
@@ -683,7 +708,10 @@ function LoginManager:OnCharactersLoad()
   if not addonsButton.lock then
     -- Create the Lock button
     local lockButton = CreateFrame("Button", "ButtonCharButtonsLock", addonsButton, "GlueButtonSmallTemplate")
-    lockButton:SetWidth(150)
+    local buttonText = GetLocalizedText("LockCharacters") -- Dynamic width depending on the text
+    lockButton:SetText(buttonText)
+    local textWidth = lockButton:GetFontString():GetStringWidth()
+    lockButton:SetWidth(textWidth + 50) -- Add indents to the edges
     lockButton:SetHeight(35)
     lockButton:SetPoint("LEFT", addonsButton, "RIGHT", 4, 0)
 
