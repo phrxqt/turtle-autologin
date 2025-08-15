@@ -1,3 +1,8 @@
+> This is a fork to fix the character selection error with patch 1.18.
+> Please visit [MarcelineVQ's turtle-autologin project](https://github.com/MarcelineVQ/turtle-autologin) for future updates.
+
+--- 
+
 # Turtle AutoLogin 2.3.0
 
 * Requires a recent enough version of [SuperWow](https://github.com/balakethelock/SuperWoW/), currently `>=1.4`  
