@@ -1,3 +1,4 @@
+GlueConstants.lua
 GlueStrings.lua
 GlueFonts.xml
 GlueLocalization.xml
@@ -22,3 +23,4 @@ ChallengeList.xml
 
 # Autologin 2.2.3
 AutoLogin.xml
+
