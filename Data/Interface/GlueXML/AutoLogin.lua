@@ -79,6 +79,20 @@ local CLASS_COLORS = {
   ["Warrior"] = { r = 0.78, g = 0.61, b = 0.43, colorStr = "ffC69B6D" },
 }
 
+if not TW_CLASS_TOKEN then
+  TW_CLASS_TOKEN = {
+    ["Druid"] = "Druid",
+    ["Hunter"] = "Hunter", 
+    ["Mage"] = "Mage",
+    ["Paladin"] = "Paladin",
+    ["Priest"] = "Priest",
+    ["Rogue"] = "Rogue",
+    ["Shaman"] = "Shaman",
+    ["Warrior"] = "Warrior",
+    ["Warlock"] = "Warlock",
+  }
+end
+
 LoginManager = {}
 LoginManager.State = {}
 LoginManager.SelectedAcct = nil
@@ -917,3 +931,4 @@ CharacterSelect_EnterWorld = function (a1,a2,a3,a4,a5,a6,a7,a8,a9)
   LoginManager:EnterWorld()
 end
 --------
+
