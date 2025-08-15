@@ -79,18 +79,8 @@ local CLASS_COLORS = {
   ["Warrior"] = { r = 0.78, g = 0.61, b = 0.43, colorStr = "ffC69B6D" },
 }
 
-if not TW_CLASS_TOKEN then
-  TW_CLASS_TOKEN = {
-    ["Druid"] = "Druid",
-    ["Hunter"] = "Hunter", 
-    ["Mage"] = "Mage",
-    ["Paladin"] = "Paladin",
-    ["Priest"] = "Priest",
-    ["Rogue"] = "Rogue",
-    ["Shaman"] = "Shaman",
-    ["Warrior"] = "Warrior",
-    ["Warlock"] = "Warlock",
-  }
+if not TW_CLASS_TOKEN and L and L.class then
+  TW_CLASS_TOKEN = L.class
 end
 
 LoginManager = {}
